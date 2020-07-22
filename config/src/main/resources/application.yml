@@ -8,5 +8,5 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/jgsaba/springcloud-lrng1/fornecedor
-          search-paths: fornecedor
+          uri: https://github.com/jgsaba/springcloud-lrng1
+          search-paths: micro-repo/fornecedor
