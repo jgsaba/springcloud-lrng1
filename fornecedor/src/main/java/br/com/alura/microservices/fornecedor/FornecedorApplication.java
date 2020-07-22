@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 @SpringBootApplication
-public class FornecedorApplication implements CommandLineRunner {
+public class 	FornecedorApplication implements CommandLineRunner {
 
 	@Autowired
 	InfoRepositoy infoRepositoy;
