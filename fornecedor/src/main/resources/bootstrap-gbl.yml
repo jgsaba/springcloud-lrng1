@@ -4,5 +4,5 @@ spring:
 
   cloud:
     config:
-      name: dev
+      name: fornecedor-dev
       uri: http://localhost:8888
