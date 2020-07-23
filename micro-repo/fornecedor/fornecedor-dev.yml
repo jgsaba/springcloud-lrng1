@@ -5,5 +5,5 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/fornecedor?useTimezone=true&serverTimezone=UTC
-    username: root
+    username: root12
     password: 201720
