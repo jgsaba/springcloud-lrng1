@@ -9,4 +9,4 @@ spring:
       server:
         git:
           uri: https://github.com/jgsaba/springcloud-lrng1
-          search-paths: micro-repo/fornecedor
+          search-paths: micro-repo/fornecedor, micro-repo/loja, micro-repo/transportador

@@ -1,24 +1,51 @@
 package br.com.alura.microservice.loja.service;
 
 import br.com.alura.microservice.loja.dto.CompraDto;
+import br.com.alura.microservice.loja.dto.InfoPedidoDTO;
+import br.com.alura.microservice.loja.model.Compra;
+import br.com.alura.microservice.loja.repository.CompraRepository;
+import br.com.alura.microservice.loja.service.feignclient.FornecedorClient;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@Slf4j
 public class CompraService {
 
     @Autowired
     private RestTemplate restTemplate;
 
-    public void realizaCompra(CompraDto compraDto) {
+    @Autowired
+    private CompraRepository compraRepository;
 
-        // ResponseEntity will be deprecated soon. Always look forward to use WebClient instead
-        ResponseEntity<InfoFornecedorDTO> exchange = restTemplate.exchange("http://fornecedor/info/" + compraDto.getEndereco().getEstado(),
-                HttpMethod.GET, null, InfoFornecedorDTO.class);
+    @Autowired
+    private FornecedorClient fornecedorClient;
 
-        System.out.println(exchange.getBody().getEndereco());
+    @HystrixCommand
+    public Compra getById(Long id){
+        return compraRepository.findById(id).orElseGet(Compra::new);
+    }
+
+    @HystrixCommand(fallbackMethod = "realizaCompraFallBack")
+    public Compra realizaCompra(CompraDto compraDto) {
+
+        String estado = compraDto.getEndereco().getEstado();
+        log.info("Buscando informações do fornecedor de {}", estado);
+        InfoFornecedorDTO infoFornecedor = fornecedorClient.getFornecedorInfo(estado);
+
+        log.info("Realizando um pedido");
+        InfoPedidoDTO infoPedidoDTO = fornecedorClient.realizaPedido(compraDto.getItens());
+        Compra compraSalva = new Compra(compraDto, infoPedidoDTO);
+
+        return compraRepository.save(compraSalva);
+    }
+
+    public Compra realizaCompraFallBack(CompraDto compraDto){
+        Compra compraFallBack = new Compra();
+        compraFallBack.setEnderecoDeDestino("Endereco default");
+        return compraFallBack;
     }
 }

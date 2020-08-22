@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: 'fornecedor'
-
-  cloud:
-    config:
-      name: fornecedor-dev
-      uri: http://localhost:8888
