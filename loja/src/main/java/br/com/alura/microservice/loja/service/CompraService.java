@@ -38,6 +38,9 @@ public class CompraService {
 
         log.info("Realizando um pedido");
         InfoPedidoDTO infoPedidoDTO = fornecedorClient.realizaPedido(compraDto.getItens());
+
+        
+
         Compra compraSalva = new Compra(compraDto, infoPedidoDTO);
 
         return compraRepository.save(compraSalva);
