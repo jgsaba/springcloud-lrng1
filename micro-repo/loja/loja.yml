@@ -5,7 +5,7 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:mysql://localhost:3306/loja?useTimezone=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost:330/loja?useTimezone=true&serverTimezone=UTC
     username: root
     password: 201720
     
